@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             ProgramRunner runner = new ProgramRunner();
-            runner.Run<DayOne>();
+            runner.Run<Day6>();
         }
     }
 }
