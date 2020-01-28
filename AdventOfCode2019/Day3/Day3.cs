@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-namespace AdventOfCode2019.Day3
+namespace AdventOfCode2019
 {
     public class Day3 : ProgramBase
     {

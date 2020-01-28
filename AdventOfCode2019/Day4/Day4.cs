@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventOfCode2019.Day4
+namespace AdventOfCode2019
 {
     public class Day4 : ProgramBase
     {
