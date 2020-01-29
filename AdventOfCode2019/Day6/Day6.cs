@@ -8,7 +8,7 @@ namespace AdventOfCode2019
 {
     class Day6 : ProgramBase
     {
-        private int orbitCounter = 0;
+        private int _orbitCounter = 0;
         private string[] _input;
 
         public override void Solve()
@@ -18,8 +18,9 @@ namespace AdventOfCode2019
             int counter = _input.Length - 1;
             while (counter > 0)
             {
+                _orbitCounter++;
                 string orbitalRelation = _input[counter];
-                string orbitObject = orbitalRelation.Split(')')[1];
+                string[] orbitObject = orbitalRelation.Split(')');
 
                 FindOrbits(orbitObject);
 
@@ -27,22 +28,20 @@ namespace AdventOfCode2019
             }
         }
 
-        private void FindOrbits(string orbit)
+        private void FindOrbits(string[] orbitObject)
         {
             int counter = _input.Length - 1;
-            string orbitalRelation = _input[counter];
-            string[] orbitObject = orbitalRelation.Split(')');
-
-            while (orbitObject[0] != "COM")
+            string nextObject = orbitObject[0];
+            
+            while (nextObject != "COM")
             {
-                var currentOrbitalRelation = _input[counter].Split(')');
                 counter -= 1;
                 string[] nextOrbitalRelation = _input[counter].Split(')');
 
-                if (currentOrbitalRelation[0] == nextOrbitalRelation[1])
+                if (nextObject == nextOrbitalRelation[1])
                 {
-
-                    orbitCounter++;
+                    nextObject = nextOrbitalRelation[0];
+                    _orbitCounter++;
                 }
             }
         }
