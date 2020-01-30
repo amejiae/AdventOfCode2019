@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 
 namespace AdventOfCode2019
@@ -10,39 +12,69 @@ namespace AdventOfCode2019
     {
         private int _orbitCounter = 0;
         private string[] _input;
+        private readonly List<Relation> _allRelations = new List<Relation>();
 
         public override void Solve()
         {
             _input = File.ReadAllLines(".\\Inputs\\06.txt");
-
-            int counter = _input.Length - 1;
-            while (counter > 0)
+            foreach (string relation in _input)
             {
-                _orbitCounter++;
-                string orbitalRelation = _input[counter];
-                string[] orbitObject = orbitalRelation.Split(')');
-
-                FindOrbits(orbitObject);
-
-                counter -= 1;
+                string[] parentAndChild = relation.Split(')');
+                _allRelations.Add(new Relation {Parent = parentAndChild[0], Child = parentAndChild[1]});
             }
+
+            var tree = new Tree(_allRelations);
         }
 
         private void FindOrbits(string[] orbitObject)
         {
-            int counter = _input.Length - 1;
-            string nextObject = orbitObject[0];
             
-            while (nextObject != "COM")
-            {
-                counter -= 1;
-                string[] nextOrbitalRelation = _input[counter].Split(')');
+        }
+    }
 
-                if (nextObject == nextOrbitalRelation[1])
-                {
-                    nextObject = nextOrbitalRelation[0];
-                    _orbitCounter++;
-                }
+    public class Relation
+    {
+        public string Parent { get; set; }
+        public string Child { get; set; }
+    }
+
+    public class Node
+    {
+        public string Value { get; set; }
+        public List<Node> Children { get; set; }
+    }
+
+    public class Tree
+    {
+        private List<Node> _nodes = new List<Node>();
+        private List<Relation> _relations;
+
+        public Tree(List<Relation> relations)
+        {
+            _relations = relations;
+
+            var parent = new Node { Value = "COM", Children = new List<Node>()};
+            BuildTree(parent);
+        }
+
+        public List<Node> Nodes
+        {
+            get { return _nodes; }
+        }
+
+        private void BuildTree(Node parentNode)
+        {
+            IEnumerable<Node> directChildren = from r in _relations
+                                                where r.Parent == parentNode.Value
+                                                select new Node() {Value = r.Child, Children = new List<Node>()};
+
+            if (!directChildren.Any())
+                return;
+
+            parentNode.Children.AddRange(directChildren);
+            foreach (Node child in directChildren)
+            {
+                BuildTree(child);
             }
         }
     }
