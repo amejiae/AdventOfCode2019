@@ -72,6 +72,8 @@ namespace AdventOfCode2019
                 return;
 
             parentNode.Children.AddRange(directChildren);
+            _nodes.Add(parentNode);
+
             foreach (Node child in directChildren)
             {
                 BuildTree(child);
