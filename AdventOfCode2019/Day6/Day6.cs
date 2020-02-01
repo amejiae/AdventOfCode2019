@@ -20,15 +20,17 @@ namespace AdventOfCode2019
             foreach (string relation in _input)
             {
                 string[] parentAndChild = relation.Split(')');
-                _allRelations.Add(new Relation {Parent = parentAndChild[0], Child = parentAndChild[1]});
+                _allRelations.Add(new Relation { Parent = parentAndChild[0], Child = parentAndChild[1] });
             }
 
-            var tree = new Tree(_allRelations);
-        }
+            foreach (Relation relation in _allRelations)
+            {
+                var root = new Node(relation.Child);
+                var tree = new Tree(root, _allRelations);
+                _orbitCounter += tree.ParentNode.Orbits.Count;
+            }
 
-        private void FindOrbits(string[] orbitObject)
-        {
-            
+            Console.WriteLine(_orbitCounter);
         }
     }
 
@@ -40,44 +42,72 @@ namespace AdventOfCode2019
 
     public class Node
     {
-        public string Value { get; set; }
-        public List<Node> Children { get; set; }
+        private List<Node> _orbits = new List<Node>();
+
+        public Node(string value)
+        {
+            this.Value = value;
+        }
+
+        public List<Node> Orbits => _orbits;
+
+        public string Value { get; }
+
+        public void AddOrbit(Node node)
+        {
+            _orbits.Add(node);
+        }
+
+        public override string ToString()
+        {
+            return Value;
+        }
     }
 
     public class Tree
     {
-        private List<Node> _nodes = new List<Node>();
         private List<Relation> _relations;
+        private Node _parent;
 
-        public Tree(List<Relation> relations)
+        public Tree(Node root, List<Relation> relations)
         {
             _relations = relations;
 
-            var parent = new Node { Value = "COM", Children = new List<Node>()};
-            BuildTree(parent);
+            _parent = root;
+            BuildTree(_parent);
         }
 
-        public List<Node> Nodes
+        private void BuildTree(Node parent)
         {
-            get { return _nodes; }
-        }
+            var directOrbits = from r in _relations
+                where r.Child == parent.Value
+                select new Node(r.Parent);
 
-        private void BuildTree(Node parentNode)
-        {
-            IEnumerable<Node> directChildren = from r in _relations
-                                                where r.Parent == parentNode.Value
-                                                select new Node() {Value = r.Child, Children = new List<Node>()};
-
-            if (!directChildren.Any())
+            var directOrbit = directOrbits.SingleOrDefault();
+            if (directOrbit == null)
                 return;
 
-            parentNode.Children.AddRange(directChildren);
-            _nodes.Add(parentNode);
+            parent.AddOrbit(directOrbit);
+            AddOrbit(parent, directOrbit);
+        }
 
-            foreach (Node child in directChildren)
-            {
-                BuildTree(child);
-            }
+        private void AddOrbit(Node root, Node node)
+        {
+            var directOrbits = from r in _relations
+                where r.Child == node.Value
+                select new Node(r.Parent);
+
+            var directOrbit = directOrbits.SingleOrDefault();
+            if (directOrbit == null)
+                return;
+
+            root.AddOrbit(directOrbit);
+            AddOrbit(root, directOrbit);
+        }
+
+        public Node ParentNode 
+        {
+            get { return _parent; }
         }
     }
 }
