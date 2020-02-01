@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 
 namespace AdventOfCode2019
 {
     class Day6 : ProgramBase
     {
-        private int _orbitCounter = 0;
+        private int _orbitCounter;
         private string[] _input;
         private readonly List<Relation> _allRelations = new List<Relation>();
 
@@ -42,7 +39,7 @@ namespace AdventOfCode2019
 
     public class Node
     {
-        private List<Node> _orbits = new List<Node>();
+        private readonly List<Node> _orbits = new List<Node>();
 
         public Node(string value)
         {
@@ -105,9 +102,6 @@ namespace AdventOfCode2019
             AddOrbit(root, directOrbit);
         }
 
-        public Node ParentNode 
-        {
-            get { return _parent; }
-        }
+        public Node ParentNode => _parent;
     }
 }
