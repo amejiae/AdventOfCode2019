@@ -63,18 +63,18 @@ namespace AdventOfCode2019
 
     public class Tree
     {
-        private List<Relation> _relations;
-        private Node _parent;
+        private readonly List<Relation> _relations;
+        private readonly Node _parent;
 
         public Tree(Node root, List<Relation> relations)
         {
             _relations = relations;
 
             _parent = root;
-            BuildTree(_parent);
+            BuildOrbits(_parent);
         }
 
-        private void BuildTree(Node parent)
+        private void BuildOrbits(Node parent)
         {
             var directOrbits = from r in _relations
                 where r.Child == parent.Value
