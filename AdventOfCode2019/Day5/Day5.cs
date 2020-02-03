@@ -89,8 +89,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -111,8 +111,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -139,7 +139,7 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
+                modeOfFirstParameter = longOpCode[^3];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -157,8 +157,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -183,8 +183,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -209,8 +209,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];
@@ -238,8 +238,8 @@ namespace AdventOfCode2019
             if (opCode >= 100)
             {
                 var longOpCode = IntToIntArray(opCode).ToList();
-                modeOfFirstParameter = longOpCode[longOpCode.Count - 3];
-                modeOfSecondParameter = longOpCode[longOpCode.Count - 4];
+                modeOfFirstParameter = longOpCode[^3];
+                modeOfSecondParameter = longOpCode[^4];
             }
 
             int operand1 = _inputAsIntArray[_instructionPointer + 1];

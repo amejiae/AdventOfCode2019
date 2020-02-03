@@ -27,7 +27,81 @@ namespace AdventOfCode2019
                 _orbitCounter += tree.ParentNode.Orbits.Count;
             }
 
-            Console.WriteLine(_orbitCounter);
+            Console.WriteLine($"Orbit count: {_orbitCounter}");
+
+            CalculateShortestPathWithDijkstra();
+        }
+
+        private void CalculateShortestPathWithDijkstra()
+        {
+            List<string> visitedNodes = new List<string>();
+            List<string> unvisitedNodes = new List<string>();
+            List<DijkstraTableRow> dijkstraTable = new List<DijkstraTableRow>();
+
+            string origin = "YOU";
+            
+            //Get the object we (YOU node) are orbiting and set it as origin
+            string vertex = _allRelations.Single(r => r.Child == origin).Parent;
+
+            //Set the distance to all nodes to something large (int.MaxValue)
+            var allNodes = GetAllNodes();
+            foreach (string node in allNodes)
+            {
+                dijkstraTable.Add(new DijkstraTableRow {Vertex = node, ShortestDistanceFromOrigin = int.MaxValue});
+            }
+
+            //Set distance from origin to origin to 0
+            dijkstraTable.Single(r => r.Vertex == vertex).ShortestDistanceFromOrigin = 0;
+           
+            //All unvisited nodes copied to unvisited list.
+            unvisitedNodes.AddRange(allNodes);
+
+            string currentVertex = vertex;
+
+            while (unvisitedNodes.Count > 0)
+            {
+                List<string> neighborsNotVisitedOfCurrentVortex = _allRelations.Where(r => r.Parent == currentVertex || r.Child == currentVertex).Select(s => s.Parent).Union(_allRelations.Where(r => r.Parent == currentVertex || r.Child == currentVertex).Select(s => s.Child)).ToList();
+                neighborsNotVisitedOfCurrentVortex.Remove(currentVertex);
+                
+                //Only visit unvisited neighbors
+                foreach (var visitedNode in visitedNodes)
+                {
+                    neighborsNotVisitedOfCurrentVortex.Remove(visitedNode);
+                }
+
+                foreach (var node in neighborsNotVisitedOfCurrentVortex)
+                {
+                    var knownDistanceFromOrigin = dijkstraTable.Where(r => r.Vertex == node).Select(r => r.ShortestDistanceFromOrigin).Single();
+                    if (knownDistanceFromOrigin == int.MaxValue)
+                    {
+                        knownDistanceFromOrigin = 0;
+                    }
+
+                    if (knownDistanceFromOrigin + 1 < dijkstraTable.Single(r => r.Vertex == node).ShortestDistanceFromOrigin)
+                    {
+                        dijkstraTable.Single(r => r.Vertex == node).ShortestDistanceFromOrigin = knownDistanceFromOrigin + 1;
+                        dijkstraTable.Single(r => r.Vertex == node).PreviousVertex = currentVertex;
+
+                        currentVertex = node;
+                    }
+                }
+
+                unvisitedNodes.Remove(currentVertex);
+                visitedNodes.Add(currentVertex);
+
+                currentVertex = unvisitedNodes.Take(1).SingleOrDefault();
+                if (currentVertex == null)
+                    return;
+            }
+        }
+
+        private IEnumerable<string> GetAllNodes()
+        {
+            var allNodes = new List<string>();
+            allNodes.AddRange(_allRelations.Select(r => r.Parent));
+            allNodes.AddRange(_allRelations.Select(r => r.Child));
+            
+            return allNodes.Distinct();
         }
     }
 
@@ -103,5 +177,12 @@ namespace AdventOfCode2019
         }
 
         public Node ParentNode => _parent;
+    }
+
+    public class DijkstraTableRow
+    {
+        public string Vertex { get; set; }
+        public int ShortestDistanceFromOrigin { get; set; }
+        public string PreviousVertex { get; set; }
     }
 }
